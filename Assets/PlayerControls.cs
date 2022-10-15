@@ -33,6 +33,30 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""PressButtonLogging"",
+                    ""type"": ""Button"",
+                    ""id"": ""7c7bd006-aaa8-4579-b06b-5c7718e49674"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""RotationButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""b53782ba-4cce-4418-97a0-64044ab223f6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""333f3611-e6bc-4b3b-b22b-1da62cb8c50a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -101,6 +125,61 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d9775ff0-fad7-4ac8-a8f6-2a3c9f958687"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PressButtonLogging"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""316bd48d-c15d-4d62-9119-886d807cb73f"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PressButtonLogging"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""55f005ea-9da1-4d0b-ab73-a51efd174018"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotationButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e0ce7295-b752-48ca-bc06-b710fd667000"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotationButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3c48728c-9333-4973-a9f4-2f50c90c9447"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -111,6 +190,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_ActionMap = asset.FindActionMap("ActionMap", throwIfNotFound: true);
         m_ActionMap_Fire = m_ActionMap.FindAction("Fire", throwIfNotFound: true);
         m_ActionMap_Movement = m_ActionMap.FindAction("Movement", throwIfNotFound: true);
+        m_ActionMap_PressButtonLogging = m_ActionMap.FindAction("PressButtonLogging", throwIfNotFound: true);
+        m_ActionMap_RotationButton = m_ActionMap.FindAction("RotationButton", throwIfNotFound: true);
+        m_ActionMap_Jump = m_ActionMap.FindAction("Jump", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -162,12 +244,18 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private IActionMapActions m_ActionMapActionsCallbackInterface;
     private readonly InputAction m_ActionMap_Fire;
     private readonly InputAction m_ActionMap_Movement;
+    private readonly InputAction m_ActionMap_PressButtonLogging;
+    private readonly InputAction m_ActionMap_RotationButton;
+    private readonly InputAction m_ActionMap_Jump;
     public struct ActionMapActions
     {
         private @PlayerControls m_Wrapper;
         public ActionMapActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Fire => m_Wrapper.m_ActionMap_Fire;
         public InputAction @Movement => m_Wrapper.m_ActionMap_Movement;
+        public InputAction @PressButtonLogging => m_Wrapper.m_ActionMap_PressButtonLogging;
+        public InputAction @RotationButton => m_Wrapper.m_ActionMap_RotationButton;
+        public InputAction @Jump => m_Wrapper.m_ActionMap_Jump;
         public InputActionMap Get() { return m_Wrapper.m_ActionMap; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -183,6 +271,15 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Movement.started -= m_Wrapper.m_ActionMapActionsCallbackInterface.OnMovement;
                 @Movement.performed -= m_Wrapper.m_ActionMapActionsCallbackInterface.OnMovement;
                 @Movement.canceled -= m_Wrapper.m_ActionMapActionsCallbackInterface.OnMovement;
+                @PressButtonLogging.started -= m_Wrapper.m_ActionMapActionsCallbackInterface.OnPressButtonLogging;
+                @PressButtonLogging.performed -= m_Wrapper.m_ActionMapActionsCallbackInterface.OnPressButtonLogging;
+                @PressButtonLogging.canceled -= m_Wrapper.m_ActionMapActionsCallbackInterface.OnPressButtonLogging;
+                @RotationButton.started -= m_Wrapper.m_ActionMapActionsCallbackInterface.OnRotationButton;
+                @RotationButton.performed -= m_Wrapper.m_ActionMapActionsCallbackInterface.OnRotationButton;
+                @RotationButton.canceled -= m_Wrapper.m_ActionMapActionsCallbackInterface.OnRotationButton;
+                @Jump.started -= m_Wrapper.m_ActionMapActionsCallbackInterface.OnJump;
+                @Jump.performed -= m_Wrapper.m_ActionMapActionsCallbackInterface.OnJump;
+                @Jump.canceled -= m_Wrapper.m_ActionMapActionsCallbackInterface.OnJump;
             }
             m_Wrapper.m_ActionMapActionsCallbackInterface = instance;
             if (instance != null)
@@ -193,6 +290,15 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Movement.started += instance.OnMovement;
                 @Movement.performed += instance.OnMovement;
                 @Movement.canceled += instance.OnMovement;
+                @PressButtonLogging.started += instance.OnPressButtonLogging;
+                @PressButtonLogging.performed += instance.OnPressButtonLogging;
+                @PressButtonLogging.canceled += instance.OnPressButtonLogging;
+                @RotationButton.started += instance.OnRotationButton;
+                @RotationButton.performed += instance.OnRotationButton;
+                @RotationButton.canceled += instance.OnRotationButton;
+                @Jump.started += instance.OnJump;
+                @Jump.performed += instance.OnJump;
+                @Jump.canceled += instance.OnJump;
             }
         }
     }
@@ -201,5 +307,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     {
         void OnFire(InputAction.CallbackContext context);
         void OnMovement(InputAction.CallbackContext context);
+        void OnPressButtonLogging(InputAction.CallbackContext context);
+        void OnRotationButton(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
     }
 }
